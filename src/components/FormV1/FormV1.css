@@ -1,0 +1,55 @@
+.fv1-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 721px;
+  padding: 58px 40px 58px 52px;
+  background-color: lightgray;
+}
+
+.fv1-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+
+  width: 605px;
+  margin: 50px;
+  background-color: white;
+}
+
+.fv1-form-header {
+  height: 30px;
+  width: 100%;
+}
+
+.fv1-form-fieldset {
+  display: flex;
+  justify-content: space-between;
+
+  max-width: 500px;
+  width: 100%;
+}
+
+.fv1-form-field-group {
+  width: 100%;
+}
+
+.fv1-form-field {
+  height: 39px;
+  width: 100%;
+  text-align: center;
+}
+
+.fv1-form-button {
+  width: 240px;
+  height: 57px;
+}
+
+.fv1-form-footer {
+  height: 57px;
+  width: 100%;
+}
