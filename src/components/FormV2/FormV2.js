@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, useEffect } from "react";
 
 const INIT = "INIT";
 const SHOW = "SHOW";
@@ -6,6 +6,9 @@ const HIDE = "HIDE";
 const SAVE = "SAVE";
 const COMPLETED = "COMPLETED";
 
+// reducer to manage state of current form
+// need new state to set saved forms to
+// new state to pass all forms to
 const formReducer = (formState, action) => {
   switch (action.type) {
     case INIT:
@@ -14,13 +17,11 @@ const formReducer = (formState, action) => {
       return {
         ...formState,
         showForm: true,
-        data: action.payload,
       };
     case HIDE:
       return {
         ...formState,
         showForm: false,
-        data: action.payload,
       };
     case SAVE:
       return {
@@ -42,7 +43,7 @@ const formReducer = (formState, action) => {
 
 const useFormReducer = () => {
   const [formState, dispatchForm] = useReducer(formReducer, {
-    data: null,
+    data: [],
     showForm: false,
     completed: false,
   });
@@ -93,15 +94,32 @@ const Form1 = () => {
 
 const FormComponent = ({ form }) => {
   const [formState, dispatchForm] = useFormReducer();
+  console.log(formState);
 
   const addForm = () => {
     dispatchForm({ type: SHOW });
   };
 
+  useEffect(() => {
+    dispatchForm({ type: COMPLETED });
+  }, []);
+
   return (
     <div>
-      <button onClick={addForm}>Add</button>
-      {formState.showForm && <div>{form}</div>}
+      <div>
+        {formState.COMPLETED &&
+          formState.data &&
+          formState.data.map((value, index) => (
+            <div key={`${value.firstName}-${index}`}>
+              <div>{value.firstName}</div>
+              <div>{value.lastName}</div>
+            </div>
+          ))}
+      </div>
+      <div>
+        <button onClick={addForm}>Add</button>
+        {formState.showForm && <div>{form}</div>}
+      </div>
     </div>
   );
 };
