@@ -40,16 +40,16 @@ const reducer = (forms, action) => {
   }
 };
 
-const useFormReducer = () => {
-  const [forms, dispatch] = useReducer(reducer, []);
-  const [formData, setFormData] = useState("");
+// const useFormReducer = () => {
+//   const [forms, dispatch] = useReducer(reducer, []);
+//   const [formData, setFormData] = useState("");
 
-  const saveForm = (e) => {
-    e.preventDefault();
-    dispatch({ type: ACTIONS.SAVE, payload: { formData: formData } });
-    setFormData("");
-  };
-};
+//   const saveForm = (e) => {
+//     e.preventDefault();
+//     dispatch({ type: ACTIONS.SAVE, payload: { formData: formData } });
+//     setFormData("");
+//   };
+// };
 
 const Form = ({ form, dispatch }) => {
   const editForm = () => {
@@ -80,7 +80,7 @@ const FormV3 = () => {
   const [formData, setFormData] = useState(initialFormData);
 
   const handleFormChange = (e) => {
-    console.log(formData);
+    console.log("handleFormChange", formData);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
