@@ -1,0 +1,11 @@
+.fv3-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  border: 1px solid green;
+}
+.fv3-header {
+  display: flex;
+  border: 1px solid blue;
+}
