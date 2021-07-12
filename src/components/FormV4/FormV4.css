@@ -1,0 +1,41 @@
+.fv3-container {
+  border: 2px solid black;
+
+  width: 600px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fv3-group {
+  border: 1px dotted pink;
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* gap: 20px; */
+}
+
+.fv3-list {
+  border: 1px dotted purple;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.fv3-header {
+  border: 1px dotted green;
+
+  display: flex;
+}
+
+.fv3-body {
+  border: 1px dotted blue;
+}
+
+.fv3-footer {
+  border: 1px dotted orange;
+}
