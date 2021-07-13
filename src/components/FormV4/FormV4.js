@@ -9,31 +9,27 @@ const initialFormData = {
 const ACTIONS = {
   ADD: "ADD",
   SAVE: "SAVE",
-  //   CANCEL: "CANCEL",
-  EDIT: "EDIT",
   DELETE: "DELETE",
 };
 
 const reducer = (forms, action) => {
   switch (action.type) {
-    case ACTIONS.SAVE:
+    case ACTIONS.ADD:
       return [
         ...forms,
         {
-          id: Date.now(),
+          id: forms.length + 1,
           formData: action.payload.formData,
-          complete: false,
+          complete: true,
           showForm: false,
         },
       ];
-
-    case ACTIONS.EDIT:
-      return forms.map((form) => {
-        if (form.id === action.payload.id) {
-          return { ...form, showForm: !form.showForm };
-        }
-        return form;
-      });
+    case ACTIONS.SAVE:
+      return forms.map((form) =>
+        form.id === action.payload.id
+          ? { ...form, formData: action.payload.formData }
+          : form
+      );
     case ACTIONS.DELETE:
       return forms.filter((form) => form.id !== action.payload.id);
 
@@ -42,24 +38,30 @@ const reducer = (forms, action) => {
   }
 };
 
-const Form = ({ form, editForm, deleteForm }) => {
+const Form = ({ form, saveForm, deleteForm }) => {
   const [formData, setFormData] = useState(form.formData);
   const [open, setOpen] = useState(false);
 
   const toggleForm = () => {
     setOpen(!open);
-    console.log(`toggleForm: ${form.id}`, open);
+    console.log(`toggleForm - ${form.id}`, open);
   };
 
-  const handleFormChange = (e) => {
+  const handleFormData = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(`handleFormData - ${form.id}`, formData);
+  };
+
+  const cancelForm = () => {
+    setFormData(form.formData);
+    toggleForm();
   };
 
   return (
     <div>
-      <div className="fv3-header">
+      {/* FORM HEADER */}
+      <div className="fv4-header">
         <button disabled>Add</button>
-        {/* FORM SUMMARY */}
         {!open && (
           <>
             <button onClick={toggleForm}>Edit</button>
@@ -68,38 +70,47 @@ const Form = ({ form, editForm, deleteForm }) => {
         )}
       </div>
 
+      {/* FORM SUMMARY */}
       {!open && (
         <>
-          <div className="fv3-summary">
-            <p>{form.formData.firstName}</p>
-            <p>{form.formData.lastName}</p>
+          <div className="fv4-summary">
+            <p>{formData.firstName}</p>
+            <p>{formData.lastName}</p>
           </div>
         </>
       )}
 
-      {/* FORM */}
+      {/* FORM BODY*/}
       {open && (
-        <div className="fv3-group">
-          <div className="fv3-body">
+        <div className="fv4-group">
+          <div className="fv4-body">
             <form>
               <input
                 value={formData.firstName}
                 name="firstName"
                 placeholder="firstName"
-                onChange={handleFormChange}
+                onChange={handleFormData}
               />
               <input
                 value={formData.lastName}
                 name="lastName"
                 placeholder="lastName"
-                onChange={handleFormChange}
+                onChange={handleFormData}
               />
             </form>
           </div>
 
-          <div className="fv3-footer">
-            <button onClick={toggleForm}>Cancel</button>
-            <button>Save</button>
+          {/* FORM FOOTER */}
+          <div className="fv4-footer">
+            <button onClick={cancelForm}>Cancel</button>
+            <button
+              onClick={() => {
+                saveForm(form.id, formData);
+                toggleForm();
+              }}
+            >
+              Save
+            </button>
           </div>
         </div>
       )}
@@ -123,73 +134,82 @@ const FormV4 = () => {
     toggleForm();
   };
 
-  const handleFormChange = (e) => {
-    console.log("handleFormChange", formData);
+  const handleFormData = (e) => {
+    console.log("handleFormData", formData);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const saveForm = (e) => {
+  const addForm = (e) => {
     e.preventDefault();
-    dispatch({ type: ACTIONS.SAVE, payload: { formData: formData } });
+    dispatch({ type: ACTIONS.ADD, payload: { formData: formData } });
     setFormData(initialFormData);
     toggleForm();
   };
 
-  const editForm = (id) => {
-    dispatch({ type: ACTIONS.EDIT, payload: { id: id } });
+  const saveForm = (id, formData) => {
+    dispatch({ type: ACTIONS.SAVE, payload: { id: id, formData: formData } });
   };
 
   const deleteForm = (id) => {
     dispatch({ type: ACTIONS.DELETE, payload: { id: id } });
   };
 
-  console.log("forms", forms);
+  const submitPage = (e) => {
+    e.preventDefault();
+    console.log("submitPage forms", forms);
+  };
+
+  console.log("useReducer - forms", forms);
 
   return (
-    <div className="fv3-container">
-      <div className="fv3-group">
-        <div className="fv3-list">
+    <div className="fv4-container">
+      <div className="fv4-group">
+        {/* FORM SUMMARY */}
+        <div className="fv4-list">
           {forms.map((form) => {
             return (
               <Form
                 key={form.id}
                 form={form}
-                editForm={editForm}
+                saveForm={saveForm}
                 deleteForm={deleteForm}
-                handleFormChange={handleFormChange}
+                handleFormData={handleFormData}
               />
             );
           })}
         </div>
 
-        <div className="fv3-header">
+        {/* FORM HEADER */}
+        <div className="fv4-header">
           <button onClick={toggleForm}>Add</button>
         </div>
 
+        {/* FORM BODY */}
         {open && (
           <>
-            <div className="fv3-body">
-              <form onSubmit={saveForm}>
+            <div className="fv4-body">
+              <form onSubmit={addForm}>
                 <input
                   value={formData.firstName}
                   name="firstName"
                   placeholder="firstName"
-                  onChange={handleFormChange}
+                  onChange={handleFormData}
                 />
                 <input
                   value={formData.lastName}
                   name="lastName"
                   placeholder="lastName"
-                  onChange={handleFormChange}
+                  onChange={handleFormData}
                 />
               </form>
             </div>
 
-            <div className="fv3-footer">
+            {/* FORM FOOTER */}
+            <div className="fv4-footer">
               <button onClick={cancelForm}>Cancel</button>
               <button
                 onClick={(e) => {
-                  saveForm(e);
+                  addForm(e);
                   toggleForm();
                 }}
               >
@@ -199,6 +219,8 @@ const FormV4 = () => {
           </>
         )}
       </div>
+
+      <button onClick={submitPage}>Submit Page</button>
     </div>
   );
 };
