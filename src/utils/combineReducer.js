@@ -1,3 +1,5 @@
+import React from "react";
+
 const StoreContext = React.createContext();
 const initialState = { a: 1, b: 1 };
 
